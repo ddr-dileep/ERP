@@ -102,3 +102,19 @@ export async function updateUserInfoController(
     res.status(400).json(apiOtherError(error));
   }
 }
+
+export async function deleteUserInfoController(req: Request | any, res: Response) {
+  try {
+    const deletedUser = await userModel.findByIdAndDelete(req.user.id);
+
+    if (!deletedUser) {
+      return res
+        .status(404)
+        .json(apiErrorResponse("authentication_error", "User not found"));
+    }
+
+    res.status(200).json(apiSuccessResponse({}, "User deleted"));
+  } catch (error) {
+    res.status(400).json(apiOtherError(error));
+  }
+}

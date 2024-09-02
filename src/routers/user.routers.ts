@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  deleteUserInfoController,
   getUserInfoController,
   loginUserController,
   registerUsercontroller,
@@ -19,3 +20,4 @@ usreRouters.post("/create", registerUsermiddleware, registerUsercontroller);
 usreRouters.post("/login", logonUserMiddleware, loginUserController);
 usreRouters.get("/get-info", authMiddleware, getUserInfoController);
 usreRouters.patch("/update-info", authMiddleware, updateUserInfoController);
+usreRouters.patch("/update-info", authMiddleware, deleteUserInfoController);
