@@ -8,8 +8,13 @@ import { comparePassword, hashPassword } from "../utils/bcrypt";
 import userModel from "../models/usre.models";
 import { createToken } from "../utils/token";
 
-export async function registerUsercontroller(req: Request, res: Response) {
+export async function registerUsercontroller(
+  req: Request | any,
+  res: Response
+) {
   try {
+    const owner = await userModel.findById(req.user.id);
+
     const user = new userModel({
       ...req.body,
       password: await hashPassword(req.body.password),
@@ -28,7 +33,9 @@ export async function registerUsercontroller(req: Request, res: Response) {
 
 export async function loginUserController(req: Request, res: Response) {
   try {
-    const user: any = await userModel.findOne({ email: req.body.email });
+    const user: any = await userModel
+      .findOne({ email: req.body.email })
+      .populate("role");
     if (!user) {
       return res.status(404).json(apiOtherError("User not found"));
     }
@@ -44,7 +51,7 @@ export async function loginUserController(req: Request, res: Response) {
     const token = await createToken({
       id: user._id,
       isAccountActive: user.isAccountActive,
-      role: user.role,
+      role: user.role.name,
     });
 
     res.json(
@@ -103,7 +110,10 @@ export async function updateUserInfoController(
   }
 }
 
-export async function deleteUserInfoController(req: Request | any, res: Response) {
+export async function deleteUserInfoController(
+  req: Request | any,
+  res: Response
+) {
   try {
     const deletedUser = await userModel.findByIdAndDelete(req.user.id);
 

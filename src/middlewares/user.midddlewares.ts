@@ -24,7 +24,7 @@ export const registerUsermiddleware = (
   next();
 };
 
-export const logonUserMiddleware = (
+export const loginUserMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
