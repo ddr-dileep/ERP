@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import { config } from "dotenv";
 import { databaseConnection } from "./configs/db-config";
 import rootRouter from "./routers";
@@ -13,12 +13,11 @@ const port: string = process.env.APPLICATION_PROT || "8000";
 
 app.use("/api/v1", rootRouter); // root router
 
-app.use((req, res) => {
-  res.status(404).json(
-    apiErrorResponse({
-      message: "Route or method not found",
-    })
-  );
+// if route or method is defined (i.e. not found api)
+app.use((req: Request, res: Response) => {
+  res
+    .status(404)
+    .json(apiErrorResponse("not-found", "Route or method not found"));
 });
 
 app.listen(port, () => {
