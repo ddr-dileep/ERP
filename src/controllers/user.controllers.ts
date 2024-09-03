@@ -5,7 +5,7 @@ import {
   apiSuccessResponse,
 } from "../configs/api/api.response.config";
 import { comparePassword, hashPassword } from "../utils/bcrypt";
-import userModel from "../models/usre.models";
+import userModel from "../models/user.models";
 import { createToken } from "../utils/token";
 
 export async function registerUsercontroller(
