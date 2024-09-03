@@ -4,7 +4,7 @@ const systemSchema: Schema = new Schema(
   {
     name: { type: String, required: true, unique: true },
     assignmedTo: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    dateOfPurchase: { type: Date, required: true },
+    dateOfPurchase: { type: Date, required: true, default: new Date() },
     assignedHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     lastUpdated: { type: Date, default: Date.now },
     status: { type: String, enum: ["active", "inactive"], default: "active" },
