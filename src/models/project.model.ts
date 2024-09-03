@@ -1,12 +1,27 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
+interface IProject extends Document {
+  name: string;
+  description?: string;
+  startDate: Date;
+  endDate?: Date;
+  assignedTo: mongoose.Schema.Types.ObjectId[];
+  team: mongoose.Schema.Types.ObjectId;
+  tasks: mongoose.Schema.Types.ObjectId[];
+  status: "active" | "inactive";
+  client?: string;
+  system: mongoose.Schema.Types.ObjectId[];
+  role?: string;
+}
+
+// Schema
 const projectSchema: Schema = new Schema(
   {
     name: { type: String, required: true },
     description: { type: String },
     startDate: { type: Date, required: true },
     endDate: { type: Date },
-    assignedTo: { type: Schema.Types.ObjectId, ref: "User" },
+    assignedTo: [{ type: Schema.Types.ObjectId, ref: "User" }],
     team: { type: Schema.Types.ObjectId, ref: "Team" },
     tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
     status: { type: String, enum: ["active", "inactive"], default: "active" },
@@ -19,17 +34,3 @@ const projectSchema: Schema = new Schema(
 
 const projectModel = mongoose.model<IProject>("Project", projectSchema);
 export default projectModel;
-
-interface IProject extends Document {
-  name: string;
-  description: string;
-  startDate: Date;
-  endDate: Date;
-  assignedTo: string;
-  team: string;
-  tasks: string[];
-  status: "active" | "inactive";
-  client: string;
-  system: string[];
-  role: string;
-}
