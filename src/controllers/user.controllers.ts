@@ -13,7 +13,17 @@ export async function registerUsercontroller(
   res: Response
 ) {
   try {
-    const owner = await userModel.findById(req.user.id);
+    const authUsers = req.user.role === "owner" || req.user.role === "hr";
+    if (!authUsers) {
+      return res
+        .status(403)
+        .json(
+          apiErrorResponse(
+            "authentication_error",
+            "Only authenticated users are allowed to create"
+          )
+        );
+    }
 
     const user = new userModel({
       ...req.body,
