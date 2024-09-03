@@ -17,7 +17,7 @@ interface IProject extends Document {
 // Schema
 const projectSchema: Schema = new Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, unique: true, required: true },
     description: { type: String },
     startDate: { type: Date, required: true },
     endDate: { type: Date },
