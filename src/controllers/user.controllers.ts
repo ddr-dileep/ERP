@@ -125,7 +125,18 @@ export async function deleteUserInfoController(
   res: Response
 ) {
   try {
-    const deletedUser = await userModel.findByIdAndDelete(req.user.id);
+    const authUsers = req.user.role === "owner" || req.user.role === "hr";
+    if (!authUsers) {
+      return res
+        .status(403)
+        .json(
+          apiErrorResponse(
+            "authentication_error",
+            "Only authenticated users are allowed to delete accounts"
+          )
+        );
+    }
+    const deletedUser = await userModel.findByIdAndDelete(req.params.id);
 
     if (!deletedUser) {
       return res
@@ -134,6 +145,49 @@ export async function deleteUserInfoController(
     }
 
     res.status(200).json(apiSuccessResponse({}, "User deleted"));
+  } catch (error) {
+    res.status(400).json(apiOtherError(error));
+  }
+}
+
+export async function getAllUsersController(req: Request | any, res: Response) {
+  try {
+    const authUsers = req.user.role === "owner" || req.user.role === "hr";
+    if (!authUsers) {
+      return res
+        .status(403)
+        .json(
+          apiErrorResponse(
+            "authentication_error",
+            "Only authenticated users are allowed to create"
+          )
+        );
+    }
+    const users = await userModel
+      .find()
+      .select("-password -createdAt -updatedAt -__v")
+      .populate({ path: "role", select: "_id name" });
+    res
+      .status(200)
+      .json(
+        apiSuccessResponse({ count: users.length, users }, "Users fetched")
+      );
+  } catch (error) {
+    res.status(400).json(apiOtherError(error));
+  }
+}
+
+export async function getAllUserByRoleControllers(req: Request, res: Response) {
+  try {
+    const users = await userModel
+      .find({ role: req.params.role })
+      .select("-password -createdAt -updatedAt -__v")
+      .populate({ path: "role", select: "_id name" });
+    res
+      .status(200)
+      .json(
+        apiSuccessResponse({ count: users.length, users }, "Developers fetched")
+      );
   } catch (error) {
     res.status(400).json(apiOtherError(error));
   }
