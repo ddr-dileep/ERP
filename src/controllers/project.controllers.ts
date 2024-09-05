@@ -53,12 +53,19 @@ export const getAllProjectsController = async (
         .json(
           apiErrorResponse(
             "authentication_error",
-            "Only authenticated users are allowed to create"
+            "Only authenticated users are allowed to fetch information"
           )
         );
     }
-    const projects = projectModel.find();
-    res.json(apiSuccessResponse({ projects }));
+    const projects = await projectModel.find();
+    res
+      .status(200)
+      .json(
+        apiSuccessResponse(
+          { count: projects.length, projects },
+          "Projects fetched successfully"
+        )
+      );
   } catch (error) {
     res.status(400).json(apiOtherError(error));
   }
