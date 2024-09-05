@@ -4,10 +4,14 @@ const dailyStatusSchema: Schema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     date: { type: Date, required: true },
-    status: { type: String, required: true },
+    status: {
+      type: String,
+      enum: ["done", "in progress", "not started"],
+      required: true,
+    },
     details: { type: String, required: true },
     timeSpent: { type: Number },
-    project: { type: Schema.Types.ObjectId, ref: "Project" },
+    projects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
     leads: { type: Schema.Types.ObjectId, ref: "User", required: true },
   },
   { timestamps: true }
@@ -24,7 +28,7 @@ interface IDailyStatus extends Document {
   date: Date;
   status: string;
   details: string;
-  timeSpent: number;
-  project: string;
+  timeSpent?: number;
+  project: string[];
   leads: string;
 }
