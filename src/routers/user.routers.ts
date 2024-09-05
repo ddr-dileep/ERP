@@ -1,6 +1,8 @@
 import { Router } from "express";
 import {
   deleteUserInfoController,
+  getAllUserByRoleControllers,
+  getAllUsersController,
   getUserInfoController,
   loginUserController,
   registerUsercontroller,
@@ -25,4 +27,15 @@ usreRouters.post(
 usreRouters.post("/login", loginUserMiddleware, loginUserController);
 usreRouters.get("/get-info", authMiddleware, getUserInfoController);
 usreRouters.patch("/update-info", authMiddleware, updateUserInfoController);
-usreRouters.patch("/update-info", authMiddleware, deleteUserInfoController);
+usreRouters.delete(
+  "/delete-info/:id",
+  authMiddleware,
+  deleteUserInfoController
+);
+usreRouters.get("/get-all", authMiddleware, getAllUsersController);
+
+usreRouters.get(
+  "/get-all-users-by-role/:role",
+  authMiddleware,
+  getAllUserByRoleControllers
+);
