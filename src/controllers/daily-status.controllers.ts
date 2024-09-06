@@ -113,9 +113,13 @@ export const getDailyStatusByUserIdController = async (
 
 export const getMyDailyStatuses = async (req: Request | any, res: Response) => {
   try {
-    const dailyStatuses = await dailyStatusModal.find({
-      user: req.user.id,
-    });
+    const dailyStatuses = await dailyStatusModal
+      .find({
+        user: req.user.id,
+      })
+      .populate({ path: "leads", select: "_id name email " })
+      .populate({ path: "projects", select: "_id name startDate client" })
+      .select("-__v -createdAt -updatedAt");
     res
       .status(200)
       .json(
