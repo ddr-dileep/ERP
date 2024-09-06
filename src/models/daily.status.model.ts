@@ -3,7 +3,7 @@ import mongoose, { Document, Schema } from "mongoose";
 const dailyStatusSchema: Schema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    date: { type: Date, required: true },
+    date: { type: String, required: true },
     status: {
       type: String,
       enum: ["done", "in progress", "not started"],
@@ -12,7 +12,7 @@ const dailyStatusSchema: Schema = new Schema(
     details: { type: String, required: true },
     timeSpent: { type: Number },
     projects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
-    leads: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    leads: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
   },
   { timestamps: true }
 );
@@ -25,7 +25,7 @@ export default dailyStatusModal;
 
 interface IDailyStatus extends Document {
   user: string;
-  date: Date;
+  date: string;
   status: string;
   details: string;
   timeSpent?: number;
