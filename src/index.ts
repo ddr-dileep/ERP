@@ -5,11 +5,13 @@ import rootRouter from "./routers";
 import { apiErrorResponse } from "./configs/api/api.response.config";
 import { mailOptions, transporter } from "./configs/email";
 import cron from "node-cron";
+import cros from "cors";
 
 // env and app configuration
 config();
 databaseConnection();
 const app = express();
+app.use(cros());
 app.use(express.json());
 const port: string = process.env.APPLICATION_PROT || "8000";
 const SENDER_EMAIL = process.env.SENDER_EMAIL;
